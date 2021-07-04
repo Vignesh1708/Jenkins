@@ -1,0 +1,4 @@
+1. Jenkins Intgration with EMAIL, MAVEN, GIT
+2. Jenkins Pipeline
+	writing jenkinsfile
+3. Complete CICD workflow example

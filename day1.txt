@@ -1,0 +1,11 @@
+1. what is CICD
+2. Installation
+	Installation on Linux
+	Run as docker container
+3. Getting started with Jenkins UI
+ create your first job
+	Executing shell script from jenkins
+	Parameters - types
+4. scenario - db backup and upload to S3
+5. Jenkins with Ansible
+	
