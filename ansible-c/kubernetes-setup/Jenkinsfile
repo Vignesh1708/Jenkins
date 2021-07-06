@@ -4,11 +4,7 @@ pipeline {
         stage('Build') {
             steps {
                 sh 'echo $WORKSPACE'
-            }
-        }
-        stage('Test') {
-            steps {
-                echo 'Testing..'
+                sh 'ansible-playbook k8s-setup.yaml'
             }
         }
       }
