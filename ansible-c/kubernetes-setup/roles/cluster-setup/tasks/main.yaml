@@ -5,8 +5,14 @@
     name: kubectl
     state: present
 
+- name: check cluster existence
+  shell: "netstat apn | grep 64433"
+  register: result
+  ignore_errors: yes
+
 # Initialize Cluster. The log is also used to prevent an second initialization
 - name: Initialize Cluster
+  when: "{{ result.failed }}" == "true"
   shell: kubeadm init --pod-network-cidr=10.10.0.0/16 --apiserver-advertise-address=192.168.5.11
   register: result
   until: result.stdout.find("Your Kubernetes control-plane has initialized successfully!") != -1
