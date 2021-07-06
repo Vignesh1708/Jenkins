@@ -6,7 +6,7 @@
     state: present
 
 - name: check cluster existence
-  shell: "netstat apn | grep 64433"
+  shell: "netstat apn | grep 6443"
   register: result
   ignore_errors: yes
 
