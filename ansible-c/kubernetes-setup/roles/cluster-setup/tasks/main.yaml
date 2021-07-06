@@ -14,7 +14,7 @@
 
 # Wait for kubeadm to complete initialization of cluster
 - name: Wait for kubeadm to complete initialization
-  wait_for: "host={{ hostvars['lab-k8s-master']['ansible_default_ipv4']['address'] }} port=6443 delay=10"
+  wait_for: "host={{ hostvars['lab-k8s-master']['ansible_default_ipv4']['address'] }} port=6443 delay=60"
  
 # Create the configuration / configuration directory
 - name: Create .kube directory
