@@ -7,10 +7,11 @@
 
 # Initialize Cluster. The log is also used to prevent an second initialization
 - name: Initialize Cluster
-  shell: kubeadm init --pod-network-cidr=10.10.0.0/16 --apiserver-advertise-address=192.168.5.11 >> cluster_init.log
-  args:
-    chdir: $HOME
-    creates: cluster_init.log
+  shell: kubeadm init --pod-network-cidr=10.10.0.0/16 --apiserver-advertise-address=192.168.5.11
+  register: result
+  until: result.stdout.find("Your Kubernetes master has initialized successfully!") != -1
+  retries: 1
+  delay: 20
 
 # Wait for kubeadm to complete initialization of cluster
 #- name: Wait for kubeadm to complete initialization
