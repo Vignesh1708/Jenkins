@@ -1,4 +1,0 @@
-pkgs:
-  - docker.io
-  - kubelet
-  - kubeadm
