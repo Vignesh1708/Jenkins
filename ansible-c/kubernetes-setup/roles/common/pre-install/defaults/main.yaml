@@ -1,4 +1,7 @@
 pkgs:
+  - apt-transport-https
+  - ca-certificates
+  - curl
   - docker.io
   - kubelet
   - kubeadm
