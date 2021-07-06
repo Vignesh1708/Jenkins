@@ -26,9 +26,6 @@
 - name: Disable firewall
   shell: "ufw disable"
 
-- name: Disable SELINUX
-  shell: "sed -i.bak 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config"
-
 - name: Create service drop-in directory
   file:
     path: /etc/systemd/system/kubelet.service.d/
