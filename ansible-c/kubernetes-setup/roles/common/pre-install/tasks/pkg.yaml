@@ -29,8 +29,8 @@
 
 - name: Install kubernetes packages (Debian/Ubuntu)
   when: ansible_os_family == "Debian"
-  shell: "sudo apt-get update"
-  
+  shell: "sudo apt-get update --allow-unauthenticated"
+
 - name: Install kubernetes packages (RHEL/CentOS)
   when: ansible_os_family == "RedHat"
   yum:
