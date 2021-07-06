@@ -23,6 +23,14 @@
     enabled: yes
     gpgcheck: no
 
+- name: update repo
+  when: ansible_os_family == "RedHat"
+  shell: "sudo yum update"
+
+- name: Install kubernetes packages (Debian/Ubuntu)
+  when: ansible_os_family == "Debian"
+  shell: "sudo apt-get update"
+  
 - name: Install kubernetes packages (RHEL/CentOS)
   when: ansible_os_family == "RedHat"
   yum:
