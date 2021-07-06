@@ -44,4 +44,4 @@
     enabled: yes
 
 - name: Install Kubernetes packages
-  include_tasks: pkg.yml
+  include_tasks: pkg.yaml
