@@ -1,0 +1,16 @@
+---
+- hosts: k8smaster
+  gather_facts: yes
+  become: yes
+  roles:
+    - { role: common/os-check }
+    - { role: common/pre-install }
+    - { role: cluster-setup }
+
+- hosts: k8snodes
+  gather_facts: yes
+  become: yes
+  roles:
+    - { role: common/os-check }
+    - { role: common/pre-install }
+    - { role: node-join }
