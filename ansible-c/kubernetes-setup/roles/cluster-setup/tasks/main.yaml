@@ -12,6 +12,10 @@
     chdir: $HOME
     creates: cluster_init.log
 
+# Wait for kubeadm to complete initialization of cluster
+- name: Wait for kubeadm to complete initialization
+  wait_for: "host={{ hostvars['lab-k8s-master']['ansible_default_ipv4']['address'] }} port=6443 delay=10"
+ 
 # Create the configuration / configuration directory
 - name: Create .kube directory
   file:
