@@ -3,8 +3,8 @@ pipeline {
     stages {
         stage('deploy kubernetes cluster') {
             steps {
-                sh 'echo $WORKSPACE'
-                sh 'ansible-playbook ${WORKSPACE}/ansible-c/kubernetes-setup/k8s-setup.yaml'
+                sh 'cd $WORKSPACE/ansible-c/kubernetes-setup'
+                sh 'ansible-playbook k8s-setup.yaml'
             }
         }
       }
