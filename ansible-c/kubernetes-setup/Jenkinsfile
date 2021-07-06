@@ -1,0 +1,18 @@
+pipeline {
+    agent any
+    environment{
+        job = k8s-cluster-setup
+    }
+    stages {
+        stage('Build') {
+            steps {
+                sh 'echo $WORKSPACE'
+            }
+        }
+        stage('Test') {
+            steps {
+                echo 'Testing..'
+            }
+        }
+      }
+}
