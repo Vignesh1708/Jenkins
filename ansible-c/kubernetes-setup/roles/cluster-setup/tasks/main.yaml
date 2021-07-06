@@ -9,7 +9,7 @@
 - name: Initialize Cluster
   shell: kubeadm init --pod-network-cidr=10.10.0.0/16 --apiserver-advertise-address=192.168.5.11
   register: result
-  until: result.stdout.find("Your Kubernetes master has initialized successfully!") != -1
+  until: result.stdout.find("Your Kubernetes control-plane has initialized successfully!") != -1
   retries: 1
   delay: 20
 
@@ -31,10 +31,7 @@
     remote_src: yes
 
 - name: Setup Weavenetwork. Use log to prevent second installation
-  shell: kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')" >> weave_setup.log
-  args:
-    chdir: $HOME
-    creates: flannel_setup.log
+  shell: kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')" 
 
 - name: Create token to join cluster
   shell: kubeadm token create --print-join-command
