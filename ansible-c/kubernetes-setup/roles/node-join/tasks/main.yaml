@@ -1,5 +1,5 @@
 - name: Wait for master's port 6443
-  wait_for: "host={{ hostvars['lab-k8s-master']['ansible_default_ipv4']['address'] }} port=6443 timeout=1"
+  wait_for: "host={{ hostvars['lab-k8s-master']['ansible_hostname'] }} port=6443 timeout=1"
 
 - name: Join the cluster. Use log to prevent joining twice
   shell: "{{ hostvars['lab-k8s-master'].join_command }} >> node_join.log"
