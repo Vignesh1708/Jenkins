@@ -37,10 +37,7 @@
     remote_src: yes
 
 - name: Setup Weavenetwork. Use log to prevent second installation
-  shell: kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')" >> weave_network_setup.log
-  args:
-    chdir: $HOME
-    creates: cluster_creation.log
+  shell: kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')" 
 
 - name: Create token to join cluster
   shell: kubeadm token create --print-join-command
