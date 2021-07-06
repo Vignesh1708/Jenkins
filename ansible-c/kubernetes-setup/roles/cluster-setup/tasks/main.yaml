@@ -13,7 +13,10 @@
 # Initialize Cluster. The log is also used to prevent an second initialization
 - name: Initialize Cluster
   when: result.failed == true
-  shell: kubeadm init --pod-network-cidr=10.10.0.0/16 --apiserver-advertise-address=192.168.5.11
+  shell: kubeadm init --pod-network-cidr=10.10.0.0/16 --apiserver-advertise-address=192.168.5.11 >> cluster_creation.log
+  args:
+    chdir: $HOME
+    creates: cluster_creation.log
   register: result
   until: result.stdout.find("Your Kubernetes control-plane has initialized successfully!") != -1
   retries: 1
@@ -37,8 +40,11 @@
     remote_src: yes
 
 - name: Setup Weavenetwork. Use log to prevent second installation
-  shell: kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')" 
-
+  shell: kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')" >> weave_network_setup.log
+  args:
+    chdir: $HOME
+    creates: cluster_creation.log
+    
 - name: Create token to join cluster
   shell: kubeadm token create --print-join-command
   register: join_command_raw
