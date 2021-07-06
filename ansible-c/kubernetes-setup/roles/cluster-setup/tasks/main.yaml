@@ -7,7 +7,7 @@
 
 # Initialize Cluster. The log is also used to prevent an second initialization
 - name: Initialize Cluster
-  shell: kubeadm init --pod-network-cidr=10.244.0.0/16 >> cluster_init.log
+  shell: kubeadm init --pod-network-cidr=10.10.0.0/16 --apiserver-advertise-address=192.168.5.11 >> cluster_init.log
   args:
     chdir: $HOME
     creates: cluster_init.log
