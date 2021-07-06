@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment{
-        job = k8s-cluster-setup
+        job = k8sclustersetup
     }
     stages {
         stage('Build') {
