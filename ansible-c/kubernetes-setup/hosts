@@ -9,5 +9,6 @@ k8smaster
 k8snodes
 
 [all:vars]
+ansible_user=ansible
 ansible_become=true
 ansible_become_pass=password
