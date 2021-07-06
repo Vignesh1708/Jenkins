@@ -19,7 +19,7 @@
     creates: cluster_creation.log
   register: result
   until: result.stdout.find("Your Kubernetes control-plane has initialized successfully!") != -1
-  retries: 1
+  #retries: 1
   delay: 20
 
 # Wait for kubeadm to complete initialization of cluster
@@ -44,7 +44,7 @@
   args:
     chdir: $HOME
     creates: cluster_creation.log
-    
+
 - name: Create token to join cluster
   shell: kubeadm token create --print-join-command
   register: join_command_raw
