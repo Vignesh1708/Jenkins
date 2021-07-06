@@ -38,7 +38,7 @@ Vagrant.configure("2") do |config|
   # Create a public network, which generally matched to bridged network.
   # Bridged networks make the machine appear as another physical device on
   # your network.
-  # config.vm.network "public_network"
+  #config.vm.network "public_network"
 
   # Share an additional folder to the guest VM. The first argument is
   # the path on the host to the actual folder. The second argument is
@@ -64,13 +64,13 @@ Vagrant.configure("2") do |config|
         node.vm.provider "virtualbox" do |vb|
             vb.name = "lab-k8s-master"
             vb.memory = 2048
-            vb.cpus = 1
+            vb.cpus = 2
             vb.customize ["modifyvm", :id, "--uart1", "0x3F8", "4"]
             vb.customize ["modifyvm", :id, "--uartmode1", "file", File::NULL]
         end
         node.vm.hostname = "lab-k8s-master"
         node.vm.network :private_network, ip: IP_NW + "#{MASTER_IP_START + i}"
-          #node.vm.network "forwarded_port", guest: 22, host: "#{2710 + i}"
+          node.vm.network "forwarded_port", guest: 22, host: "#{2710 + i}"
 
         node.vm.provision "setup-hosts", :type => "shell", :path => "ubuntu/vagrant/setup-hosts.sh" do |s|
           s.args = ["enp0s8"]
@@ -94,7 +94,7 @@ Vagrant.configure("2") do |config|
         end
         node.vm.hostname = "lab-k8s-node0#{i}"
         node.vm.network :private_network, ip: IP_NW + "#{NODE_IP_START + i}"
-          #node.vm.network "forwarded_port", guest: 22, host: "#{2720 + i}"
+          node.vm.network "forwarded_port", guest: 22, host: "#{2720 + i}"
 
         node.vm.provision "setup-hosts", :type => "shell", :path => "ubuntu/vagrant/setup-hosts.sh" do |s|
           s.args = ["enp0s8"]
@@ -118,7 +118,7 @@ Vagrant.configure("2") do |config|
         end
         node.vm.hostname = "jenkins-server"
         node.vm.network :private_network, ip: IP_NW + "#{JENKINS_IP_START + i}"
-         # node.vm.network "forwarded_port", guest: 22, host: "#{2730 + i}"
+         node.vm.network "forwarded_port", guest: 22, host: "#{2730 + i}"
 
         node.vm.provision "setup-hosts", :type => "shell", :path => "ubuntu/vagrant/setup-hosts.sh" do |s|
           s.args = ["enp0s8"]
@@ -142,7 +142,7 @@ Vagrant.configure("2") do |config|
         end
         node.vm.hostname = "gitlab-server"
         node.vm.network :private_network, ip: IP_NW + "#{GITLAB_IP_START + i}"
-         # node.vm.network "forwarded_port", guest: 22, host: "#{2740 + i}"
+         node.vm.network "forwarded_port", guest: 22, host: "#{2740 + i}"
 
         node.vm.provision "setup-hosts", :type => "shell", :path => "ubuntu/vagrant/setup-hosts.sh" do |s|
           s.args = ["enp0s8"]
