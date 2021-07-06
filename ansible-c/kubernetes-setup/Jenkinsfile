@@ -7,7 +7,7 @@ pipeline {
         stage('deploy kubernetes cluster') {
             steps {
                 sh 'cd $WORKSPACE/ansible-c/kubernetes-setup'
-                sh 'ansible-playbook -i ${WORKSPACE}/ansible-c/kubernetes-setup/hosts ${WORKSPACE}/ansible-c/kubernetes-setup/k8s-setup.yaml -u ansible -p password'
+                sh 'ansible-playbook -i ${WORKSPACE}/ansible-c/kubernetes-setup/hosts ${WORKSPACE}/ansible-c/kubernetes-setup/k8s-setup.yaml'
             }
         }
       }
