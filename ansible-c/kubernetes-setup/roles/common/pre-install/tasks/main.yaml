@@ -24,10 +24,10 @@
     - { name: 'net.bridge.bridge-nf-call-iptables', value: '1' }
 
 - name: Disable firewall
-  shell: "sudo ufw disable"
+  shell: "ufw disable"
 
 - name: Disable SELINUX
-  shell: "setenforce 0 && sed -i.bak 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config"
+  shell: "sed -i.bak 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config"
 
 - name: Create service drop-in directory
   file:
