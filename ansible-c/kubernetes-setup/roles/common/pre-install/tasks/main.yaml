@@ -11,6 +11,9 @@
     backrefs: yes
     state: present
 
+- name: bridge-nf
+  shell: "modprobe br_netfilter"
+
 - name: Disable swappiness and pass bridged IPv4 traffic to iptable's chains
   sysctl:
     name: "{{ item.name }}"
