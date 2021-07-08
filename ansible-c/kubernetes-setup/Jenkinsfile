@@ -12,7 +12,7 @@ pipeline {
     stages {
         stage('checkout') {
             steps {
-                checkout()
+                checkOut()
             }
         }
         stage('display variable') {
@@ -38,11 +38,11 @@ def display() {
 
 // checkout
 
-def checkout() {
+def checkOut() {
     git credentialsId: 'github', url: 'https://github.com/teachdops/jenkins.git'
 }
 // deploy
 
 def deploy() {
-    ansiblePlaybook credentialsId: 'github', installation: 'ansible', inventory: '${PLAY_PATH}/hosts', playbook: '${PLAY_PATH}/test.yaml', sudoUser: null
+    ansiblePlaybook credentialsId: 'github', installation: 'ansible', inventory: "${PLAY_PATH}/hosts", playbook: "${PLAY_PATH}/test.yaml", sudoUser: null
 }
