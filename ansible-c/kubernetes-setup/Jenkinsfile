@@ -1,15 +1,37 @@
 pipeline {
     agent any
+
+    options {
+        disableConcurrentBuilds()
+    }
+
     environment {
         pass = credentials('ansible')
+        PLAY_PATH = "${WORKSPACE}/ansible-c/kubernetes-setup" 
     }
     stages {
+        stage('display variable') {
+            steps {
+                display()
+            }
+        }
         stage('deploy kubernetes cluster') {
             steps {
-                sh 'cd $WORKSPACE/ansible-c/kubernetes-setup'
-                sh 'ansible-playbook -i ${WORKSPACE}/ansible-c/kubernetes-setup/hosts ${WORKSPACE}/ansible-c/kubernetes-setup/k8s-setup.yaml \
-                    -u ansible --private-key=/home/ansible/.ssh/id_rsa'
+                deploy()
             }
         }
       }
+}
+
+// display
+
+def display() {
+    sh 'echo ${PLAY_PATH}'
+}
+
+// deploy
+
+def deploy() {
+    sh 'ansible-playbook -i ${PLAY_PATH}/hosts ${PLAY_PATH}/k8s-setup.yaml \
+        -u ansible --private-key=/home/ansible/.ssh/id_rsa'
 }
