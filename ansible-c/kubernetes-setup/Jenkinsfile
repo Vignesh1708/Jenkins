@@ -38,7 +38,7 @@ def display() {
 
 // checkout
 
-def chckout() {
+def checkout() {
     git credentialsId: 'github', url: 'https://github.com/teachdops/jenkins.git'
 }
 // deploy
