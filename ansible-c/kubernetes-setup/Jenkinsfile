@@ -6,7 +6,7 @@ pipeline {
     }
 
     environment {
-        pass = credentials('ansible')
+        //pass = credentials('ansible')
         PLAY_PATH = "${WORKSPACE}/ansible-c/kubernetes-setup" 
     }
     stages {
