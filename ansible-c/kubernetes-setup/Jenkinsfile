@@ -10,6 +10,11 @@ pipeline {
         PLAY_PATH = "${WORKSPACE}/ansible-c/kubernetes-setup" 
     }
     stages {
+        stage('checkout') {
+            steps {
+                checkout()
+            }
+        }
         stage('display variable') {
             steps {
                 display()
