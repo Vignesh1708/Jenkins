@@ -1,0 +1,12 @@
+- hosts: k8s
+  become: yes
+  tasks:
+  - name: Install Pre-requisites on Ubuntu
+    apt:
+      name: "{{ item }}" 
+      state: latest
+    when: ansible_distribution == "Ubuntu"
+    loop:
+      - tree
+      - git
+      - patch
