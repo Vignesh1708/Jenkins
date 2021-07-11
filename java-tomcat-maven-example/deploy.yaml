@@ -1,0 +1,14 @@
+---
+- hosts: gitlab-server
+  become: true
+  tasks:
+    - name: deploy dependency app
+      copy:
+        src: /var/lib/jenkins/workspace/pipeline-cicd-workflow-full/java-tomcat-maven-example/target/dependency/*.jar
+        dest: /home/ansible/
+    - name: deploy application
+      copy:
+        src: /var/lib/jenkins/workspace/pipeline-cicd-workflow-full/java-tomcat-maven-example/target/*.war
+        dest: /home/ansible/
+    - name: start the app
+      shell: 'java -jar /home/ansible/*.jar /home/ansible/*.war'
