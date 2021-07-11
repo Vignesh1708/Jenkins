@@ -55,5 +55,5 @@ def checkOut() {
 
 def deploy() {
 
-    ansiblePlaybook become: true, becomeUser: null, credentialsId: 'ansiblewithkey', disableHostKeyChecking: true, installation: 'ansible', inventory: '${PLAY_PATH}/hosts', playbook: '${PLAY_PATH}/k8s-setup.yaml'
+    ansiblePlaybook become: true, becomeUser: null, credentialsId: 'ansible', disableHostKeyChecking: true, installation: 'ansible', inventory: '${PLAY_PATH}/hosts', playbook: '${PLAY_PATH}/k8s-setup.yaml'
 }
