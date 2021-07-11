@@ -21,14 +21,15 @@ pipeline {
                 '''
             }
         }
-        stage('deploy war'){
+        stage('deploy'){
             steps {
                 sshPublisher(publishers: [sshPublisherDesc(configName: 'gitlab-server', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'ls /home/ansible', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '${WORKSPACE}/java-tomcat-maven-example/target/', sourceFiles: '${WORKSPACE}/java-tomcat-maven-example/target/*.war')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+                sshPublisher(publishers: [sshPublisherDesc(configName: 'gitlab-server', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'ls /home/ansible', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '${WORKSPACE}/java-tomcat-maven-example/target/', sourceFiles: '${WORKSPACE}/java-tomcat-maven-example/target/dependency/*.jar')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
             }
         }
-        stage('deploy jar and start service'){
+        stage('start service'){
             steps {
-                sshPublisher(publishers: [sshPublisherDesc(configName: 'gitlab-server', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'ls /home/ansible', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '${WORKSPACE}/java-tomcat-maven-example/target/', sourceFiles: '${WORKSPACE}/java-tomcat-maven-example/target/dependency/*.jar')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+                sshPublisher(publishers: [sshPublisherDesc(configName: 'gitlab-server', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'java -jar *.jar *.war', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
             }
         }
     }
