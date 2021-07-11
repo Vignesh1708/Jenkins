@@ -5,6 +5,11 @@ pipeline {
         disableConcurrentBuilds()
     }
 
+    environment {
+    ANSIBLE_CREDS = credentials('ansible')
+    J_PATH = '${WORKSPACE}/java-tomcat-maven-example'
+    }
+
     stages {
         stage('checkout') {
             steps {
@@ -15,7 +20,7 @@ pipeline {
         stage('build'){
             steps {
                 sh ''' 
-                    cd ${WORKSPACE}/java-tomcat-maven-example && \
+                    cd ${J_PATH} && \
                     mvn clean package
                                     
                 '''
@@ -23,8 +28,16 @@ pipeline {
         }
         stage('deploy'){
             steps {
-                sshPublisher(publishers: [sshPublisherDesc(configName: 'gitlab-server', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'ls /home/ansible', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '${WORKSPACE}/java-tomcat-maven-example/target/', sourceFiles: '${WORKSPACE}/java-tomcat-maven-example/target/*.war')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
-                sshPublisher(publishers: [sshPublisherDesc(configName: 'gitlab-server', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'ls /home/ansible', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '${WORKSPACE}/java-tomcat-maven-example/target/', sourceFiles: '${WORKSPACE}/java-tomcat-maven-example/target/dependency/*.jar')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+                withCredentials([sshUserPrivateKey(credentialsId: 'ansible', keyFileVariable: 'ansible_key', passphraseVariable: '', usernameVariable: 'ansible')]) {
+    // some block
+
+                sh '''
+                    ansible gitlab-server -m copy -a "src=${J_PATH}/target/dependency/*.jar dest=/opt/"  -u ansible --private-key=ansible_key && \
+                    ansible gitlab-server -m copy -a "src=${J_PATH}/target/*.war dest=/opt/"  -u ansible --private-key=ansible_key
+                '''
+                // sshPublisher(publishers: [sshPublisherDesc(configName: 'gitlab-server', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'ls /home/ansible', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '${WORKSPACE}/java-tomcat-maven-example/target/', sourceFiles: '${WORKSPACE}/java-tomcat-maven-example/target/*.war')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+                // sshPublisher(publishers: [sshPublisherDesc(configName: 'gitlab-server', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'ls /home/ansible', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '${WORKSPACE}/java-tomcat-maven-example/target/', sourceFiles: '${WORKSPACE}/java-tomcat-maven-example/target/dependency/*.jar')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+                }
             }
         }
         stage('start service'){
