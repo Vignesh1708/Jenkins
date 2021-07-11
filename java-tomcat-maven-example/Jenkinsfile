@@ -15,7 +15,7 @@ pipeline {
         stage('build'){
             steps {
                 sh ''' 
-                    cd ${WORKSPACE} && \
+                    cd ${WORKSPACE}/java-tomcat-maven-example && \
                     mvn clean package
                 
                 '''
