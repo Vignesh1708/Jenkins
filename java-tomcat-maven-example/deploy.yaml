@@ -11,4 +11,4 @@
         src: /var/lib/jenkins/workspace/pipeline-cicd-workflow-full/java-tomcat-maven-example/target/java-tomcat-maven-example.war
         dest: /home/ansible/
     - name: start the app
-      shell: 'java -jar /home/ansible/*.jar /home/ansible/*.war'
+      shell: 'nohup java -jar /home/ansible/*.jar /home/ansible/*.war &'
