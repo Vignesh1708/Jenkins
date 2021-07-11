@@ -7,7 +7,7 @@ pipeline {
 
     environment {
     ANSIBLE_CREDS = credentials('ansible')
-    J_PATH = '${WORKSPACE}/java-tomcat-maven-example'
+    J_PATH = "${WORKSPACE}/java-tomcat-maven-example"
     }
 
     stages {
