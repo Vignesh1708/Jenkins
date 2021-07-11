@@ -1,0 +1,44 @@
+pipeline {
+    agent any
+
+    options {
+        disableConcurrentBuilds()
+    }
+
+    stages {
+        stage('checkout') {
+            steps {
+                checkOut()
+            }
+        }
+
+        stage('build'){
+            steps {
+                sh ''' 
+                    cd ${WORKSPACE} && \
+                    mvn clean package
+                
+                '''
+            }
+        }
+        stage('deploy'){
+            steps {
+                sshPublisher(publishers: [sshPublisherDesc(configName: 'gitlab-server', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'ls /home/ansible', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '/home/ansible/', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '${WORKSPACE}/target/*.war')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+            }
+            steps {
+                sshPublisher(publishers: [sshPublisherDesc(configName: 'gitlab-server', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'java -jar /home/ansible/*.jar /home/ansible/*.war', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '/home/ansible/', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '${WORKSPACE}/target/dependency/*.jar')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+            }
+        }
+    }
+}
+
+
+
+
+
+
+// checkout
+
+def checkOut() {
+    git credentialsId: 'github', url: 'https://github.com/teachdops/jenkins.git'
+}

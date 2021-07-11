@@ -1,0 +1,81 @@
+name: Sample Maven-Example
+on:
+  push:
+  pull_request:
+    types: [opened, reopened]
+  
+jobs:
+  CI:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest] #, windows-latest]
+        java-version: [1.8, 1.13]
+      fail-fast: true
+    env:
+      CI: true
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setting Java ${{ matrix.java-version }} on ${{ matrix.os }}
+        uses: actions/setup-java@v1  
+        with:
+          java-version: ${{ matrix.java-version }}
+      - name: Caching Maven Packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          repository-keys: ${{ runner.os }}-m2
+      - name: Build
+        run: mvn -B package
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v1
+        with:
+          name: mvn-artifact
+          path: target/java-tomcat-maven-example.war
+      - name: Notify Slack
+        run: |
+          curl -X POST --data-urlencode "payload={\"channel\": \"#cje-testing\", \"username\": \"GitHub-Actions\", \"text\": \"The status of the job ${{ github.job }} is ${{ job.status }}.\", \"icon_emoji\": \":github:\"}" ${{ secrets.SLACK_WEBHOOK }}
+      # - name: Printing Contexts
+      #   env:
+      #     JOBS_VARS: ${{ toJson(job) }}
+      #     GITHUB_VARS: ${{ toJson(github) }}
+      #   run: |
+      #     echo "$JOBS_VARS"
+      #     echo "$GITHUB_VARS"
+      - name: Building Dockerimage
+        uses: docker/build-push-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          #registry: packages.aa.com
+          repository: lokeshkamalay/tomcat
+          tag: ${{ github.run_id }}-${{ github.run_number }}
+        
+     
+  CD:
+    needs: CI
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download the Artifacts
+        uses: actions/download-artifact@v1
+        with:
+          name: mvn-artifact
+      - name: Deploy to Dev
+        if: github.ref == 'refs/heads/feature*' || github.ref != 'refs/heads/bug*'
+        run: |
+          echo "I'm doing a CF Push to Dev Here"
+      - name: Deploy to Stage
+        if: github.ref == 'refs/heads/develop'
+        run: |
+          echo "I'm doing a CF Push to Stage Here"
+      - name: Deploy to Prod
+        if: github.ref == 'refs/heads/master'
+        run: |
+          echo "I'm doing a CF Push to Prod Here"
+      - name: Notify Slack
+        if: always()
+        run: |
+          curl -X POST --data-urlencode "payload={\"channel\": \"#cje-testing\", \"username\": \"GitHub-Actions\", \"text\": \"The status of the job ${{ github.job }} is ${{ job.status }}.\", \"icon_emoji\": \":github:\"}" ${{ secrets.SLACK_WEBHOOK }}
