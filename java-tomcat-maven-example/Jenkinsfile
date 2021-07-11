@@ -23,12 +23,12 @@ pipeline {
         }
         stage('deploy'){
             steps {
-                sshPublisher(publishers: [sshPublisherDesc(configName: 'gitlab-server', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'ls /home/ansible', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '/home/ansible/', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '${WORKSPACE}/java-tomcat-maven-example/target/*.war')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+                sshPublisher(publishers: [sshPublisherDesc(configName: 'gitlab-server', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'ls /home/ansible', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '/home/ansible/', remoteDirectorySDF: false, removePrefix: '${WORKSPACE}/java-tomcat-maven-example/target/', sourceFiles: '${WORKSPACE}/java-tomcat-maven-example/target/*.war')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
             }
         }
         stage('start service'){
             steps {
-                sshPublisher(publishers: [sshPublisherDesc(configName: 'gitlab-server', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'java -jar /home/ansible/*.jar /home/ansible/*.war', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '/home/ansible/', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '${WORKSPACE}/java-tomcat-maven-example/target/dependency/*.jar')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+                sshPublisher(publishers: [sshPublisherDesc(configName: 'gitlab-server', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'ls /home/ansible', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '/home/ansible/', remoteDirectorySDF: false, removePrefix: '${WORKSPACE}/java-tomcat-maven-example/target/', sourceFiles: '${WORKSPACE}/java-tomcat-maven-example/target/dependency/*.jar')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
             }
         }
     }
