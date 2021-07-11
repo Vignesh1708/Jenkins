@@ -7,7 +7,7 @@ sudo apt-get -y install python3 \
                         python3-pip \
                         software-properties-common \
                         git \
-                        maven \
+                        maven 
                         
 
 # Install java and jenkins

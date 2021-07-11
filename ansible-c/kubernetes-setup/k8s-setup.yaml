@@ -1,6 +1,7 @@
 ---
 - hosts: k8smaster
   gather_facts: yes
+  remote_user: ansible
   become: yes
   roles:
     - { role: common/os-check }

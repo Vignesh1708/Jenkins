@@ -2,3 +2,7 @@
 2. Jenkins Pipeline
 	writing jenkinsfile
 3. Complete CICD workflow example
+4. Administration
+	adding slave node
+	creating user and managing permissions
+	install and remove plugins
